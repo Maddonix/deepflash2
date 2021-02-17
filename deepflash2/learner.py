@@ -333,7 +333,7 @@ class EnsembleLearner(GetAttr):
         model = self.load_model(model_path)
         batch_tfms = Normalize.from_stats(*self.stats)
         ds = TileDataset(files, **self.ds_kwargs)
-        dls = DataLoaders.from_dsets(ds, batch_size=bs, after_batch=batch_tfms, shuffle=False, drop_last=False)
+        dls = DataLoaders.from_dsets(ds, batch_size=bs, after_batch=batch_tfms, shuffle=False, drop_last=False, num_workers = 0)
         if torch.cuda.is_available(): dls.cuda(), model.cuda()
         learn = Learner(dls, model, loss_func=self.loss_fn)
         if self.mpt: learn.to_fp16()
